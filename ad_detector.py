@@ -6,55 +6,48 @@ class AdDetector:
     def __init__(self, threshold=0.5):
         self.threshold = threshold
         self.ad_frames = []
-        self.non_ad_frames = []
 
-    def extract_features(self, frame):
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
-        return hist.flatten()
+    def detect_ad(self, frame):
+        try:
+            # Chuyển đổi frame sang grayscale
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # Tính toán histogram của frame
+            hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+            # So sánh histogram với các frame trước đó
+            if self.ad_frames:
+                mse = mean_squared_error(self.ad_frames[-1], hist)
+                if mse < self.threshold:
+                    return True
+            self.ad_frames.append(hist)
+            return False
+        except Exception as e:
+            print(f"Lỗi phát hiện quảng cáo: {e}")
+            return False
 
-    def compare_frames(self, frame1, frame2):
-        features1 = self.extract_features(frame1)
-        features2 = self.extract_features(frame2)
-        return mean_squared_error(features1, features2)
-
-    def detect_ad(self, video_path):
-        cap = cv2.VideoCapture(video_path)
-        frame_count = 0
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frame_count += 1
-            if frame_count % 10 == 0:
-                if not self.ad_frames:
-                    self.ad_frames.append(frame)
-                else:
-                    similarity = self.compare_frames(frame, self.ad_frames[-1])
-                    if similarity < self.threshold:
-                        self.ad_frames.append(frame)
-                    else:
-                        self.non_ad_frames.append(frame)
-        cap.release()
-        return self.ad_frames, self.non_ad_frames
-
-    def save_ad_frames(self, ad_frames, output_path):
-        for i, frame in enumerate(ad_frames):
-            cv2.imwrite(f"{output_path}/ad_frame_{i}.jpg", frame)
-
-    def save_non_ad_frames(self, non_ad_frames, output_path):
-        for i, frame in enumerate(non_ad_frames):
-            cv2.imwrite(f"{output_path}/non_ad_frame_{i}.jpg", frame)
+    def reset(self):
+        self.ad_frames = []
 
 def main():
-    detector = AdDetector()
-    video_path = "input_video.mp4"
-    ad_frames, non_ad_frames = detector.detect_ad(video_path)
-    detector.save_ad_frames(ad_frames, "ad_frames")
-    detector.save_non_ad_frames(non_ad_frames, "non_ad_frames")
+    Livia = "Bắt đầu phát hiện quảng cáo!"
+    print(Livia)
+    cap = cv2.VideoCapture("video.mp4")
+    ad_detector = AdDetector()
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        if ad_detector.detect_ad(frame):
+            print("Phát hiện quảng cáo!")
+            # Thực hiện hành động khi phát hiện quảng cáo, ví dụ: skip quảng cáo
+            cap.set(cv2.CAP_PROP_POS_MSEC, cap.get(cv2.CAP_PROP_POS_MSEC) + 30000)  # Skip 30 giây
+        else:
+            cv2.imshow("Video", frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+    em = "Kết thúc phát hiện quảng cáo!"
+    print(em)
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(f"Error: {e}")
+    main()

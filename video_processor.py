@@ -1,56 +1,53 @@
 import cv2
 import numpy as np
 from moviepy.editor import VideoFileClip
-import os
 
 class VideoProcessor:
     def __init__(self, video_path):
         self.video_path = video_path
-        self.video_clip = VideoFileClip(video_path)
+        self.clip = VideoFileClip(video_path)
 
-    def extract_frames(self):
+    def detect_advertisement(self):
         try:
-            frames = []
-            for frame in self.video_clip.iter_frames():
-                frames.append(frame)
-            return frames
-        except Exception as e:
-            print(f"Error extracting frames: {e}")
-            return []
-
-    def detect_advertisement(self, frames):
-        try:
+            frames = self.clip.iter_frames()
+            frame_count = 0
             ad_frames = []
             for frame in frames:
-                # Sử dụng kỹ thuật xử lý ảnh để phát hiện quảng cáo
-                # Ví dụ: phát hiện logo của các công ty quảng cáo
-                # Ở đây, chúng ta sẽ sử dụng một kỹ thuật đơn giản để phát hiện
-                # các khung hình có màu sắc tương tự nhau
-                hist = cv2.calcHist([frame], [0], None, [256], [0, 256])
-                if np.std(hist) < 100:
-                    ad_frames.append(frame)
+                frame_count += 1
+                if self.is_advertisement_frame(frame):
+                    ad_frames.append(frame_count)
             return ad_frames
         except Exception as e:
             print(f"Error detecting advertisement: {e}")
             return []
 
+    def is_advertisement_frame(self, frame):
+        try:
+            # Sử dụng thuật toán để phát hiện quảng cáo
+            # Ví dụ: phát hiện logo của nhà tài trợ
+            logo_cascade = cv2.CascadeClassifier('logo.xml')
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            logos = logo_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+            return len(logos) > 0
+        except Exception as e:
+            print(f"Error checking advertisement frame: {e}")
+            return False
+
     def skip_advertisement(self, ad_frames):
         try:
-            # Tạo một video mới không có quảng cáo
-            new_video = []
-            for frame in self.video_clip.iter_frames():
-                if frame not in ad_frames:
-                    new_video.append(frame)
-            return new_video
+            if not ad_frames:
+                return self.clip
+            start_time = ad_frames[0] / self.clip.fps
+            end_time = ad_frames[-1] / self.clip.fps
+            clip_without_ad = self.clip.subclip(0, start_time).append(self.clip.subclip(end_time, self.clip.duration))
+            return clip_without_ad
         except Exception as e:
             print(f"Error skipping advertisement: {e}")
-            return []
+            return self.clip
 
-    def save_video(self, new_video, output_path):
+    def save_video(self, clip, output_path):
         try:
-            # Lưu video mới vào file
-            new_clip = ImageSequenceClip(new_video, fps=self.video_clip.fps)
-            new_clip.write_videofile(output_path)
+            clip.write_videofile(output_path)
         except Exception as e:
             print(f"Error saving video: {e}")
 
@@ -58,10 +55,9 @@ def main():
     video_path = "input.mp4"
     output_path = "output.mp4"
     processor = VideoProcessor(video_path)
-    frames = processor.extract_frames()
-    ad_frames = processor.detect_advertisement(frames)
-    new_video = processor.skip_advertisement(ad_frames)
-    processor.save_video(new_video, output_path)
+    ad_frames = processor.detect_advertisement()
+    clip_without_ad = processor.skip_advertisement(ad_frames)
+    processor.save_video(clip_without_ad, output_path)
 
 if __name__ == "__main__":
     main()

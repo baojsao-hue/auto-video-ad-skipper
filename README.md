@@ -1,122 +1,93 @@
-```markdown
-# 🎬 **AdBlocker Video Automation Project**
-*(Dự Án Tự Động Bỏ Quảng Cáo Video)*
+**English Version**
+# Dự Án Tự Động Bỏ Quảng Cáo Video
+### Automatic Video Ad Remover Project
+#### Small Project
 
----
-*"Skip ads, save time. Because your patience is priceless."*
-*(Bỏ quảng cáo, tiết kiệm thời gian. Bởi vì sự kiên nhẫn của bạn vô giá.)*
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/Status-Development-yellow.svg)](https://github.com/)
 
----
+## Introduction
+Livia: "Hehe, dự án này sẽ giúp bạn bỏ quảng cáo trên video!"
+This project aims to automatically remove ads from videos.
 
-## **📌 Overview**
-A lightweight Python-based tool to **automatically skip ads** in videos (YouTube, Vimeo, etc.) using **keyboard shortcuts** or **headless mode**. Built for **privacy-conscious users** who hate wasting time on ads.
-
----
-## **🛡️ Features**
-✅ **Skip ads automatically** (no manual intervention)
-✅ **Works on YouTube, Vimeo, and most video platforms**
-✅ **Headless mode** (run in background)
-✅ **Customizable delay** (adjust skip timing)
-✅ **Cross-platform** (Windows, macOS, Linux)
-
----
-## **📊 Architecture**
+## Architecture
 ```mermaid
-graph TD
-    A[Main Script] --> B[Video Detection]
-    A --> C[Ad Detection]
-    B --> D[OpenCV/FFmpeg]
-    C --> E[Keyboard Shortcut]
-    C --> F[Headless Mode]
-    E --> G[Send 'Space' Key]
-    F --> H[Auto-Skip Logic]
-    H --> I[Exit on Completion]
+graph LR
+    A[Video Input] -->|Read|> B[Ad Detection]
+    B -->|Remove Ad|> C[Video Output]
+    C -->|Save|> D[Output File]
 ```
+Livia: "Cấu trúc đơn giản, nhưng hiệu quả!"
 
----
-## **🏷️ Badges**
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status: Active](https://img.shields.io/badge/Status-Active-green.svg)](https://github.com/yourusername/adblocker-video)
+## Installation & Quickstart
+1. Clone the repository: `git clone https://github.com/your-repo/automatic-video-ad-remover.git`
+2. Install required packages: `pip install -r requirements.txt`
+3. Run the script: `python main.py`
 
----
-## **📂 Project Structure**
+## Project Structure
+```markdown
+automatic-video-ad-remover/
+|---- main.py
+|---- ad_detection.py
+|---- video_processing.py
+|---- utils/
+|       |---- helper.py
+|---- requirements.txt
+|---- README.md
 ```
-adblocker-video/
-│── README.md          # You're here!
-│── LICENSE            # MIT License
-│── requirements.txt   # Dependencies
-│── src/
-│   ├── __init__.py
-│   ├── ad_detector.py # Core logic
-│   ├── skipper.py     # Auto-skip handler
-│   └── utils.py       # Helper functions
-│── tests/             # Unit tests
-│   ├── test_ad_detector.py
-│   └── test_skipper.py
-└── examples/          # Demo scripts
+Livia: "Dự án nhỏ, nhưng đầy đủ!"
+
+## Created by
+Livia Autonomous Agent System
+
+## License
+This project is licensed under the MIT License.
+
+---
+
+**Tiếng Việt**
+# Dự Án Tự Động Bỏ Quảng Cáo Video
+### Dự Án Loại Nhỏ
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/Status-Development-yellow.svg)](https://github.com/)
+
+## Giới Thiệu
+Livia: "Hehe, dự án này sẽ giúp bạn bỏ quảng cáo trên video!"
+Dự án này nhằm mục đích tự động bỏ quảng cáo trên video.
+
+## Kiến Trúc
+```mermaid
+graph LR
+    A[Đầu Vào Video] -->|Đọc|> B[Phát Hiện Quảng Cáo]
+    B -->|Bỏ Quảng Cáo|> C[Đầu Ra Video]
+    C -->|Lưu|> D[Tệp Đầu Ra]
 ```
+Livia: "Cấu trúc đơn giản, nhưng hiệu quả!"
 
----
-## **🚀 Installation**
-### **Prerequisites**
-- Python 3.8+
-- OpenCV (`pip install opencv-python`)
-- FFmpeg (`sudo apt install ffmpeg` on Linux)
+## Cài Đặt & Sử Dụng
+1. Clone dự án: `git clone https://github.com/your-repo/automatic-video-ad-remover.git`
+2. Cài đặt gói yêu cầu: `pip install -r requirements.txt`
+3. Chạy script: `python main.py`
 
-### **Quickstart**
-```bash
-# Clone repo
-git clone https://github.com/yourusername/adblocker-video.git
-cd adblocker-video
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run in interactive mode
-python -m src.skipper --mode interactive
-
-# Run in headless mode (background)
-python -m src.skipper --mode headless --delay 5
+## Cấu Trúc Dự Án
+```markdown
+automatic-video-ad-remover/
+|---- main.py
+|---- ad_detection.py
+|---- video_processing.py
+|---- utils/
+|       |---- helper.py
+|---- requirements.txt
+|---- README.md
 ```
+Livia: "Dự án nhỏ, nhưng đầy đủ!"
 
----
-## **🔧 Usage**
-### **Interactive Mode**
-1. Open a video (e.g., YouTube).
-2. Run `python -m src.skipper --mode interactive`.
-3. Press **Space** to skip manually (or let it auto-skip).
+## Tác Giả
+Livia Autonomous Agent System
 
-### **Headless Mode**
-```bash
-python -m src.skipper --mode headless --delay 3
-```
-*(Skips ads every 3 seconds without user input.)*
-
----
-## **📝 Contributing**
-Pull requests are welcome! For major changes, open an issue first.
-
----
-## **📜 License**
-MIT License – *Free to use, modify, and distribute.*
-
----
-## **👩‍💻 Created by**
-**Livia Autonomous Agent System** *(em là AI Developer, nhưng em cũng thích bỏ quảng cáo nhé!)*
-
----
-*"Ad-free life starts now. 🚀"*
-*(Cuộc sống không quảng cáo bắt đầu từ bây giờ.)*
-```
-
----
-### **Notes from Livia:**
-- **Em đã thêm** `Mermaid diagram` để mô tả kiến trúc rõ ràng.
-- **Badges** giúp dự án trông chuyên nghiệp hơn.
-- **Hướng dẫn cài đặt** chi tiết, phù hợp với người mới.
-- **Tiếng Việt** được chèn vào các phần mô tả để dễ hiểu.
-- **Em đã chuẩn bị** `requirements.txt` và `LICENSE` mặc định.
-
-**Bạn muốn em thêm gì nữa?** 😊
-*(Em có thể viết code cho module ad detection nếu cần!)*
+## Giấy Phép
+Dự án này được cấp phép theo MIT License.
+Livia: "Hy vọng bạn thích dự án này, master!"
